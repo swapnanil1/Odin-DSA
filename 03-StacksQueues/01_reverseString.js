@@ -7,7 +7,7 @@ function reverseString(str) {
     stack.push(letter);
   }
   const revStr = [];
-  while (stack.data.length > 0) {
+  while (stack.size() > 0) {
     revStr.push(stack.pop());
   }
   return revStr;

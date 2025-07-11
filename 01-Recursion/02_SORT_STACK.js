@@ -5,8 +5,10 @@ for (const letter of arr) {
     stack.push(letter);
 }
 sortStack(stack)
+console.log(stack.data);
+
 function sortStack(stack) {
-    if (stack.data.length === 1) return stack
+    if (stack.size() === 1) return stack
     const temp = stack.pop()
     sortStack(stack)
     insert(stack, temp)
@@ -22,5 +24,3 @@ function insert(stack, temp) {
     insert(stack, temp)
     stack.push(temp2)
 }
-
-console.log(stack.data);

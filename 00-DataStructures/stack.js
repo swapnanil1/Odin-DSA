@@ -21,5 +21,7 @@ export default class Stacks {
     else
       return null;
   }
-
+  size() {
+    return this.data.length;
+  }
 }
