@@ -12,10 +12,9 @@ function printSubset(ip, op, hash) {
   const op2 = [...op];
 
   op2.push(ip[0]);
-  const newIp = ip.slice(1);
 
-  const countLeft = printSubset(newIp, op1, hash);
-  const countRight = printSubset(newIp, op2, hash);
+  const countLeft = printSubset(ip.slice(1), op1, hash);
+  const countRight = printSubset(ip.slice(1), op2, hash);
 
   return countLeft + countRight;
 }
