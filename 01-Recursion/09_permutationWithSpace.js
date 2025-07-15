@@ -13,7 +13,6 @@ function solve(input, output = [], count = 0) {
   return;
 }
 
-const value = "abc";
+const value = "abcd";
 const input = value.split("");
-const output = [];
 solve(input);
