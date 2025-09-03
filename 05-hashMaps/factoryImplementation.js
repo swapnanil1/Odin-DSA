@@ -55,7 +55,57 @@ function HashMap() {
       useBucket[hashedIndex].push([key, value]);
     }
   }
-  return { set, bucket };
+  function get(key) {
+    const hashedIndex = Hash(key);
+    if (hashedIndex < 0 || hashedIndex >= bucket.length) {
+      return null;
+    } else {
+      for (let i = 0; i < bucket[hashedIndex].length; i++) {
+        if (bucket[hashedIndex][i][0] === key) {
+          return bucket[hashedIndex][i][1];
+        }
+      }
+    }
+    return null;
+  }
+  function has(key) {
+    const hashedIndex = Hash(key);
+    if (hashedIndex < 0 || hashedIndex >= bucket.length) {
+      return false;
+    } else {
+      for (let i = 0; i < bucket[hashedIndex].length; i++) {
+        if (bucket[hashedIndex][i][0] === key) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  function remove(key) {
+    const hashedIndex = Hash(key);
+    if (hashedIndex < 0 || hashedIndex >= bucket.length) {
+      return;
+    } else {
+      let i = 0;
+      // better in while loop, only enters if hashedIndex has elements
+      while (bucket[hashedIndex].length > 0) {
+        if (bucket[hashedIndex][i][0] === key) {
+          const removed = bucket[hashedIndex].splice(i, 1)[0];
+          console.log(`Removed [${removed}]`);
+          return removed[1];
+        }
+        // if only one pair was present, remove the bucket's hashedIndex and reduce capacity
+        if (bucket[hashedIndex].length === 0) {
+          bucket[hashedIndex] = undefined;
+          uCapacity--;
+          return;
+        }
+        i++;
+      }
+    }
+    return;
+  }
+  return { set, get, has, remove };
 }
 
 const test = HashMap();
@@ -71,3 +121,7 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
+console.log(test.get("kite"));
+console.log(test.get("lion"));
+console.log(test.has("jacket"));
+console.log(test.remove("lion"));
