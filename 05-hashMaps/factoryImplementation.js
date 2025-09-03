@@ -59,53 +59,111 @@ function HashMap() {
     const hashedIndex = Hash(key);
     if (hashedIndex < 0 || hashedIndex >= bucket.length) {
       return null;
-    } else {
-      for (let i = 0; i < bucket[hashedIndex].length; i++) {
-        if (bucket[hashedIndex][i][0] === key) {
-          return bucket[hashedIndex][i][1];
-        }
+    }
+    if (!bucket[hashedIndex]) return null;
+
+    for (let i = 0; i < bucket[hashedIndex].length; i++) {
+      if (bucket[hashedIndex][i][0] === key) {
+        return bucket[hashedIndex][i][1];
       }
     }
     return null;
   }
+
   function has(key) {
     const hashedIndex = Hash(key);
     if (hashedIndex < 0 || hashedIndex >= bucket.length) {
+      console.log("Invaild Key");
       return false;
-    } else {
-      for (let i = 0; i < bucket[hashedIndex].length; i++) {
-        if (bucket[hashedIndex][i][0] === key) {
-          return true;
-        }
+    }
+    if (!bucket[hashedIndex]) return null;
+    for (let i = 0; i < bucket[hashedIndex].length; i++) {
+      if (bucket[hashedIndex][i][0] === key) {
+        console.log(
+          `Found/Exist: [${bucket[hashedIndex][i][0]},${bucket[hashedIndex][i][1]}]`
+        );
+        return true;
       }
     }
+    console.log(`[${key}] Not Found`);
     return false;
   }
+
   function remove(key) {
     const hashedIndex = Hash(key);
     if (hashedIndex < 0 || hashedIndex >= bucket.length) {
-      return;
-    } else {
-      let i = 0;
-      // better in while loop, only enters if hashedIndex has elements
-      while (bucket[hashedIndex].length > 0) {
-        if (bucket[hashedIndex][i][0] === key) {
-          const removed = bucket[hashedIndex].splice(i, 1)[0];
-          console.log(`Removed [${removed}]`);
-          return removed[1];
-        }
-        // if only one pair was present, remove the bucket's hashedIndex and reduce capacity
+      return null;
+    }
+    if (!bucket[hashedIndex]) return null;
+
+    for (let i = 0; i < bucket[hashedIndex].length; i++) {
+      if (bucket[hashedIndex][i][0] === key) {
+        const removed = bucket[hashedIndex].splice(i, 1)[0];
+        console.log(`Removed [${removed}]`);
         if (bucket[hashedIndex].length === 0) {
           bucket[hashedIndex] = undefined;
           uCapacity--;
-          return;
         }
-        i++;
+        return removed[1];
       }
     }
-    return;
+    return null;
   }
-  return { set, get, has, remove };
+  function length() {
+    console.log(`buckets filled:${uCapacity}`);
+    console.log(`buckets remaining before resize :${tCapacity - uCapacity}`);
+    return uCapacity;
+  }
+  function clear() {
+    bucket = Array(capacity);
+    capacity = 16;
+    uCapacity = 0;
+    console.log("All entries deleted");
+  }
+  function keys() {
+    console.log("----------> Printing all keys in the map <----------");
+
+    const arrayOfKeys = [];
+    if (bucket.length < 0) return [];
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i]) {
+        for (let j = 0; j < bucket[i].length; j++) {
+          arrayOfKeys.push(bucket[i][j][0]);
+        }
+      }
+    }
+    return arrayOfKeys;
+  }
+  function values() {
+    console.log("----------> Printing all values in the map <----------");
+
+    const arrayOfValues = [];
+    if (bucket.length < 0) return [];
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i]) {
+        for (let j = 0; j < bucket[i].length; j++) {
+          arrayOfValues.push(bucket[i][j][1]);
+        }
+      }
+    }
+    return arrayOfValues;
+  }
+  function entries() {
+    console.log(
+      "----------> Printing Entries in [Key,Value] pattern <----------"
+    );
+    const arrayOfEntries = [];
+    if (bucket.length < 0) return [];
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i]) {
+        for (let j = 0; j < bucket[i].length; j++) {
+          arrayOfEntries.push([bucket[i][j][0], bucket[i][j][1]]);
+        }
+      }
+    }
+    return arrayOfEntries;
+  }
+  return { set, get, has, remove, length, clear, keys, values, entries };
 }
 
 const test = HashMap();
@@ -121,7 +179,18 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
+test.set("cake", "killer");
+test.set("smooth", "criminal");
+test.set("working", "fireman");
+test.set("resting", "fisherman");
 console.log(test.get("kite"));
 console.log(test.get("lion"));
+test.has("jacket");
+test.remove("jacket");
 console.log(test.has("jacket"));
-console.log(test.remove("lion"));
+
+test.length();
+console.log(test.keys());
+console.log(test.values());
+test.remove("resting");
+console.log(test.entries());
