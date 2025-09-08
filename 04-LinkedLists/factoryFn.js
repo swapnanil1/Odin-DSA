@@ -1,26 +1,25 @@
-function CreateNode(val) {
-  return {
-    val,
-    next: null,
-  };
-}
-
 function List() {
   let head = null;
   let size = 0;
+  function _createNode(val) {
+    return {
+      val,
+      next: null,
+    };
+  }
   function isEmpty() {
     if (size === 0) {
       return true;
     } else return false;
   }
   function prepend(data) {
-    const node = CreateNode(data);
+    const node = _createNode(data);
     node.next = head;
     head = node;
     size++;
   }
   function append(data) {
-    const node = CreateNode(data);
+    const node = _createNode(data);
     if (isEmpty()) {
       head = node;
     } else {
@@ -33,7 +32,7 @@ function List() {
     size++;
   }
   function insert(data, index) {
-    const node = CreateNode(data);
+    const node = _createNode(data);
     if (index < 0 || index > size) {
       return;
     } else {
