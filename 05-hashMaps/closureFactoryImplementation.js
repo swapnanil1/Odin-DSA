@@ -1,3 +1,4 @@
+// factoryFn method
 function HashMap() {
   const loadFactor = 0.75;
   let capacity = 16;
