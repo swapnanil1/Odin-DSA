@@ -71,13 +71,8 @@ function BST() {
       //3
       let leftSubTree = node.left;
       let rightSubTree = node.right;
-      if (
-        //base case
-        !leftSubTree.left &&
-        !leftSubTree.right &&
-        !rightSubTree.left &&
-        !rightSubTree.right
-      ) {
+      if (!leftSubTree.left && !leftSubTree.right) {
+        //3.1
         if (prev.left === node) {
           const newNode = _Node(leftSubTree.value);
           newNode.right = rightSubTree;
@@ -85,6 +80,17 @@ function BST() {
         } else {
           const newNode = _Node(leftSubTree.value);
           newNode.right = rightSubTree;
+          prev.right = newNode;
+        }
+      } else if (!rightSubTree.left && !rightSubTree.right) {
+        //3.2
+        if (prev.left === node) {
+          const newNode = _Node(rightSubTree.value);
+          newNode.left = leftSubTree;
+          prev.left = newNode;
+        } else {
+          const newNode = _Node(rightSubTree.value);
+          newNode.left = leftSubTree;
           prev.right = newNode;
         }
       }
