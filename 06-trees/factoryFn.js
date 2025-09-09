@@ -73,6 +73,7 @@ function BST() {
       let rightSubTree = node.right;
       if (!leftSubTree.left && !leftSubTree.right) {
         //3.1
+        // left sub trees are empty so replace prev's 'next' with leftSubTree and set leftSubTree's right to rightSubTree as its not empty
         if (prev.left === node) {
           const newNode = _Node(leftSubTree.value);
           newNode.right = rightSubTree;
@@ -84,6 +85,7 @@ function BST() {
         }
       } else if (!rightSubTree.left && !rightSubTree.right) {
         //3.2
+        // right sub trees are empty so replace prev's 'next' with rightSubTree and set rightSubTree's left to leftSubTree as its not empty
         if (prev.left === node) {
           const newNode = _Node(rightSubTree.value);
           newNode.left = leftSubTree;
