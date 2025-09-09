@@ -79,11 +79,17 @@ function BST() {
   }
   // build a tree from a passed array
   function buildTree(array) {
-    array = array.sort((a, b) => a - b);
-    const arr = [...new Set(array)];
+    const arr = [...new Set(array.sort((a, b) => a - b))];
 
-    for (let i = 0; i < arr.length; i++) {
-      insert(arr[i]);
+    function build(arr) {
+      if (!arr.length) return null;
+      const mid = Math.floor(arr.length / 2);
+      const node = _Node(arr[mid]);
+      node.left = build(arr.slice(0, mid));
+      node.right = build(arr.slice(mid + 1));
+      return node;
     }
+
+    root = build(arr);
   }
 }
