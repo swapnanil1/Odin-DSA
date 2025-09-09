@@ -34,72 +34,47 @@ function BST() {
     let current = root;
     let prev = undefined;
     while (current) {
-      if (current.value < data) {
-        if (current.left) {
-          prev = current;
-          current = current.left;
-        } else break;
-      } else if (current.value > data) {
-        if (current.right) {
-          prev = current;
-          current = current.right;
-        } else break;
-      } // we have reached to the node to delete
+      if (data < current.value) {
+        prev = current;
+        current = current.left;
+      } else if (data > current.value) {
+        prev = current;
+        current = current.right;
+      }
+      // we have reached to the node to delete
       else {
         if (current.left && current.right) {
           _deleteNodeWithBothChilds(current); // node with both children
         } else if (current.left || current.right) {
           _deleteSingleChildTree(current); // node with single children
         } else _deleteLeaf(current);
+        break;
       }
     }
+
     function _deleteLeaf(node) {
-      //1
-      node = null;
+      if (prev && prev.left === node) prev.left = null;
+      else if (prev && prev.right === node) prev.right = null;
+      else root = null;
     }
+
     function _deleteSingleChildTree(node) {
-      //2
-      if (node.left) {
-        prev.left === node ? (prev.left = node.left) : (prev.right = node.left);
-      } else {
-        prev.left === node
-          ? (prev.left = node.right)
-          : (prev.right = node.right);
-      }
+      const child = node.left ? node.left : node.right;
+      if (!prev) root = child; // deleting root
+      else if (prev.left === node) prev.left = child;
+      else prev.right = child;
     }
+
     function _deleteNodeWithBothChilds(node) {
-      //3
-      let leftSubTree = node.left;
-      let rightSubTree = node.right;
-      if (!leftSubTree.left && !leftSubTree.right) {
-        //3.1
-        // left sub trees are empty so replace prev's 'next' with leftSubTree and set leftSubTree's right to rightSubTree as its not empty
-        if (prev.left === node) {
-          const newNode = _Node(leftSubTree.value);
-          newNode.right = rightSubTree;
-          prev.left = newNode;
-        } else {
-          const newNode = _Node(leftSubTree.value);
-          newNode.right = rightSubTree;
-          prev.right = newNode;
-        }
-      } else if (!rightSubTree.left && !rightSubTree.right) {
-        //3.2
-        // right sub trees are empty so replace prev's 'next' with rightSubTree and set rightSubTree's left to leftSubTree as its not empty
-        if (prev.left === node) {
-          const newNode = _Node(rightSubTree.value);
-          newNode.left = leftSubTree;
-          prev.left = newNode;
-        } else {
-          const newNode = _Node(rightSubTree.value);
-          newNode.left = leftSubTree;
-          prev.right = newNode;
-        }
+      let parentOfLeaf = node;
+      let leaf = node.right;
+      while (leaf.left) {
+        parentOfLeaf = leaf;
+        leaf = leaf.left;
       }
-      // Maxiumum IN LEFT SUB TREE
-      if (leftSubTree.right) {
-        _deleteSingleChildTree(leftSubTree.right);
-      }
+      node.value = leaf.value;
+      if (parentOfLeaf.left === leaf) parentOfLeaf.left = leaf.right;
+      else parentOfLeaf.right = leaf.right;
     }
   }
   // build a tree from a passed array
