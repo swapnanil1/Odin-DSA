@@ -43,6 +43,7 @@ function BST() {
       }
       // we have reached to the node to delete
       else {
+        console.log(` Found ${current.value}. Deleting it now...`);
         if (current.left && current.right) {
           _deleteNodeWithBothChilds(current); // node with both children
         } else if (current.left || current.right) {
@@ -92,4 +93,46 @@ function BST() {
 
     root = build(arr);
   }
+  function prettyPrint(node = root) {
+    // CREDITS TO ODINPROJECT
+    if (!node) return;
+
+    let levels = [],
+      q = [{ n: node, d: 0 }];
+    while (q.length) {
+      let { n, d } = q.shift();
+      if (!levels[d]) levels[d] = [];
+      levels[d].push(n ? n.value : null);
+      if (n) q.push({ n: n.left, d: d + 1 }, { n: n.right, d: d + 1 });
+    }
+    while (levels.length && levels[levels.length - 1].every((v) => v === null))
+      levels.pop();
+    let w = 2 ** levels.length * 2;
+
+    console.log("─".repeat(w));
+
+    levels.forEach((l, i) =>
+      console.log(
+        l
+          .map((v) =>
+            (v === null ? " " : v)
+              .toString()
+              .padStart(Math.floor(w / 2 ** (i + 1)), " ")
+              .padEnd(Math.floor(w / 2 ** i), " ")
+          )
+          .join("")
+      )
+    );
+
+    console.log("─".repeat(w));
+  }
+
+  return { insertItem, deleteItem, buildTree, prettyPrint };
 }
+
+let sample = BST();
+let arr = [1, 2, 3, 4, 5, 6, 7];
+sample.buildTree(arr);
+sample.prettyPrint();
+sample.deleteItem(4);
+sample.prettyPrint();
